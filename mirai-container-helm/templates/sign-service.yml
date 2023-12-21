@@ -1,0 +1,18 @@
+{{- if $.Values.unidbgFetchSign.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "template.fullname" . }}
+  labels:
+    {{- include "template.signLabels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "template.signSelectorLabels" . | nindent 4 }}
+{{- end }}

@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ .Release.Name }}-mirai-api-setting-configmap
+data:
+  settings: {{ .Values.mirai.miraiApiHttp.settings | toYaml | quote }}
+  auto-login-secrets: {{ .Values.mirai.autoLoginAccounts.secretName | default "mirai-auto-login-secrets" | quote }}
+  {{- with .Values.unidbgFetchSign.enabled }}
+  kfc: |-
+    {
+      "8.9.63": {
+          "base_url": "http://{{default $.Values.unidbgFetchSign.name "unidbg-fetch-sign"}}:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      }
+    }
+  {{- end }}
+  {{- with not .Values.unidbgFetchSign.enabled }}
+  kfc: {{ .Values.unidbgFetchSign.kfc }}
+  {{- end }}

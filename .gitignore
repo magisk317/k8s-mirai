@@ -1,0 +1,7 @@
+bots/
+config/
+libs/
+modules
+plugin-libraries/
+plugin-shared-libraries/
+logs/

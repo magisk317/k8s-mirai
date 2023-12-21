@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "template.fullname" . }}
+  labels:
+    {{- include "template.labels" . | nindent 4 }}
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      {{- include "template.selectorLabels" . | nindent 6 }}
+  spec:
+    {{- with .Values.imagePullSecrets }}
+    imagePullSecrets:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    containers:
+      - name: {{ .Values.mirai.name | default "mirai" }}
+        image: {{ .Values.mirai.image | default ".." }}
+        imagePullPolicy: {{ .Values.mirai.pullPolicy }}
+        {{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
+        ports: 
+        {{- range $apiPorts }}
+          - name: api-service-port
+            containerPort: {{ . }}
+            protocol: TCP
+        {{- end }}
+    {{- with .Values.nodeSelector }}
+    nodeSelector:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.affinity }}
+    affinity:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}
+    {{- with .Values.tolerations }}
+    tolerations:
+      {{- toYaml . | nindent 8 }}
+    {{- end }}

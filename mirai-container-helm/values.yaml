@@ -1,0 +1,63 @@
+mirai:
+  name: mirai
+  # 默认镜像 mirai 2.1.2 需要的可以升级，使用mirai文件夹那个dockerfile就能打出来
+  image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
+  pullPolicy: IfNotPresent
+  cache:
+    name: mirai-bot-cache
+    size: 500Mi
+  # 暴露mirai-api-http
+  miraiApiHttp:
+    enabled: true
+    # 这部分设置会存入  
+    # 并会在mirai容器mount的文件中生成 /mirai/net.mamoe.mirai-api-http/setting.yml
+    # 具体可配置内容见 https://github.com/project-mirai/mirai-api-http/tree/e9d5609b1cd580217a868f2daa789360283ba289
+    # 注意需要匹配mirai容器中安装的版本
+    settings:
+      adapters: 
+        - http
+        - ws
+      debug: false
+      enableVerify: false
+      verifyKey: 114514
+      adapterSettings:
+        http:
+          host: 0.0.0.0
+          port: 19999
+          cors: ["*"]
+        ws:
+          host: 0.0.0.0
+          port: 19999
+    # 调整服务暴露方式，默认是 service/cluster ip
+    # 需要的话可以自己加 ingress
+    service:
+      enabled: true
+  # 自动登录的帐号，配置到secret中
+  # 会在容器启动时自动生成并覆盖 /mirai/config/Console/AutoLogin.yml
+  autoLoginAccounts:
+    secretName: mirai-auto-login-secrets
+    accounts:
+      - # 帐号列表
+        account: 123456
+        password: 
+          kind: PLAIN
+          value: pwd
+
+# 这个自带的签名就只支持内网了，需要的自己加 ingress
+unidbgFetchSign:
+  enabled: true
+  # 签名镜像也可以自己替换
+  image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
+  pullPolicy: IfNotPresent
+  name: unidbg-fetch-sign
+  # 如果enabled: false使用自己的签名服务
+  # 则需要自己传入 KFCFactory.json的内容
+  # true的时候传入无效
+  kfc: ""
+
+
+imagePullSecrets: []
+selectorLabels: []
+nodeSelector: {}
+tolerations: []
+affinity: {}

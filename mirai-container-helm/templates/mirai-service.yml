@@ -1,0 +1,23 @@
+{{- if .Values.mirai.miraiApiHttp.enabled -}}
+{{- if .Values.mirai.miraiApiHttp.service.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: {{ .Release.Namespace }}
+  name: {{ include "template.fullname" . }}
+  labels:
+    {{- include "template.labels" . | nindent 4 }}
+spec:
+  type: ClusterIP
+  {{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
+  ports:
+  {{- range $apiPorts }}
+    - port: {{ . }}
+      targetPort: {{ . }}
+      protocol: TCP
+      name: api-service-port
+  {{- end }}
+  selector:
+    {{- include "template.selectorLabels" . | nindent 4 }}
+{{- end }}
+{{- end }}
