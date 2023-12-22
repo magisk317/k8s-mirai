@@ -10,7 +10,7 @@ RUN . ./mcl -z
 FROM base AS plugin
 COPY /plugins /mirai/plugins
 RUN . ./mcl -z
-RUN echo "stop" | /bin/bash ./mcl
+RUN echo "stop" | /bin/bash ./mcl -k > /dev/null
 
 FROM base AS run
 # copy libraries for plugins
