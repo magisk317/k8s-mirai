@@ -9,10 +9,11 @@ data:
   {{ .name }}: {{ .content | quote }}
   {{- end }}
   {{- with .Values.unidbgFetchSign.enabled }}
+  {{- $fullName := include "template.fullname" $ }}
   kfc: |-
     {
       "8.9.63": {
-          "base_url": "http://{{default $.Values.unidbgFetchSign.name "unidbg-fetch-sign"}}:8080",
+          "base_url": "http://{{$fullName}}-sign:8080",
           "type": "fuqiuluo/unidbg-fetch-qsign",
           "key": "114514"
       }

@@ -10,69 +10,78 @@ spec:
   selector:
     matchLabels:
       {{- include "template.selectorLabels" . | nindent 6 }}
-  spec:
-    {{- with .Values.imagePullSecrets }}
-    imagePullSecrets:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
-    containers:
-      - name: {{ .Values.mirai.name | default "mirai" }}
-        image: {{ .Values.mirai.image | default ".." }}
-        imagePullPolicy: {{ .Values.mirai.pullPolicy }}
-        {{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
-        ports: 
-        {{- range $apiPorts }}
-          - name: api-service-port
-            containerPort: {{ . }}
-            protocol: TCP
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "template.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      containers:
+        - name: {{ .Values.mirai.name | default "mirai" }}
+          image: {{ .Values.mirai.image | default ".." }}
+          imagePullPolicy: {{ .Values.mirai.pullPolicy }}
+          {{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
+          ports: 
+          {{- range $apiPorts }}
+            - name: http-api
+              containerPort: {{ . }}
+              protocol: TCP
+          {{- end }}
+          volumeMounts:
+            - name: mirai-configurations
+              mountPath: /mirai-configurations
+            {{- if $.Values.mirai.storageLogs.enabled }}
+            - name: mirai-logs
+              mountPath: /mirai/logs
+              mountPropagation: None
+            {{- end }}
+            {{- if $.Values.mirai.storageBots.enabled }}
+            - name: mirai-bots
+              mountPath: /mirai/bots
+              mountPropagation: None
+            {{- end }}
+      volumes:
+        - name: mirai-configurations
+          configMap:
+            name: {{ .Release.Name }}-configmap
+            defaultMode: 420
+            items:
+            - key: kfc
+              path: KFCFactory.json
+            - key: settings
+              path: config/net.mamoe.mirai-api-http/setting.yml
+            {{- range $.Values.mirai.configurations }}
+            - key: {{ .name }}
+              path: {{ .path }}
+            {{- end}}
+        {{- if $.Values.mirai.storageLogs.enabled }}
+        - name: mirai-logs
+          persistentVolumeClaim:
+            claimName: {{ .Values.mirai.storageLogs.name }}
         {{- end }}
-        volumeMounts:
-          - name: "mirai-configurations"
-            mountPath: /mirai-configurations
-          {{- if $.Values.mirai.storageLogs.enabled }}
-          - name: mirai-logs
-            mountPath: /mirai/logs
-            mountPropagation: None
-          {{- end }}
-          {{- if $.Values.mirai.storageBots.enabled }}
-          - name: mirai-bots
-            mountPath: /mirai/bots
-            mountPropagation: None
-          {{- end }}
-    volumes:
-      - name: mirai-configurations
-        configMap:
-          defaultMode: 420
-          items:
-          - key: kfc
-            path: KFCFactory.json
-          - key: settings
-            path: config/net.mamoe.mirai-api-http/setting.yml
-          {{- range $.Values.mirai.configurations }}
-          - key: {{ .name }}
-            path: {{ .path }}
-          {{- end}}
-      {{- if $.Values.mirai.storageLogs.enabled }}
-      - name: mirai-logs
-        persistentVolumeClaim:
-          claimName: {{ .Values.mirai.storageLogs.name }}
+        {{- if $.Values.mirai.storageBots.enabled }}
+        - name: mirai-bots
+          persistentVolumeClaim:
+            claimName: {{ .Values.mirai.storageBots.name }}
+        {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- if $.Values.mirai.storageBots.enabled }}
-      - name: mirai-bots
-        persistentVolumeClaim:
-          claimName: {{ .Values.mirai.storageBots.name }}
+
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
       {{- end }}
-    {{- with .Values.nodeSelector }}
-    nodeSelector:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
 
-    {{- with .Values.affinity }}
-    affinity:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
-
-    {{- with .Values.tolerations }}
-    tolerations:
-      {{- toYaml . | nindent 8 }}
-    {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

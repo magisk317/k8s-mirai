@@ -1,6 +1,6 @@
 #!/bin/sh
 
-if [-f /mirai-configurations/..data]; then
+if [ -d /mirai-configurations/..data ]; then
     cp -r /mirai-configurations/..data/* ./
 fi
 

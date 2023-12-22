@@ -54,8 +54,8 @@ app.kubernetes.io/instance: {{ .Release.Name }}
 Signer labels
 */}}
 {{- define "template.signLabels" -}}
-helm.sh/chart: {{ include "template.chart" . }}
 {{ include "template.signSelectorLabels" . }}
+helm.sh/chart: {{ include "template.chart" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
 {{- end }}

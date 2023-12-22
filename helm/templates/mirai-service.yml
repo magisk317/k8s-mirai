@@ -15,7 +15,7 @@ spec:
     - port: {{ . }}
       targetPort: {{ . }}
       protocol: TCP
-      name: api-service-port
+      name: http-api
   {{- end }}
   selector:
     {{- include "template.selectorLabels" . | nindent 4 }}

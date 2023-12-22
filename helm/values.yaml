@@ -1,3 +1,6 @@
+nameOverride:
+fullnameOverride:
+
 mirai:
   name: mirai
   # 默认镜像 mirai 2.1.2 需要的可以升级，使用mirai文件夹那个Dockerfile就能打出来
@@ -6,7 +9,7 @@ mirai:
 
   # 是否启用bot登录状态持久化？
   storageBots:
-    enabled: false
+    enabled: true
     name: mirai-bot-pvc
     size: 500Mi
 
@@ -60,7 +63,6 @@ unidbgFetchSign:
   # 签名镜像也可以自己替换
   image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
   pullPolicy: IfNotPresent
-  name: unidbg-fetch-sign
   # 如果enabled: false使用自己的签名服务
   # 则需要自己传入 KFCFactory.json的内容
   # true的时候传入无效
@@ -72,3 +74,4 @@ selectorLabels: []
 nodeSelector: {}
 tolerations: []
 affinity: {}
+podAnnotations: {}
