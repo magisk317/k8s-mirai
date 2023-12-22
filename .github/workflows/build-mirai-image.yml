@@ -1,0 +1,24 @@
+name: Build Image
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Build the Docker image
+      run: cd mirai && docker build -f PigeonStagingDepolyment/Dockerfile . -t ${{secrets.DOCKER_ENDPOINT}}/zero-tools/mirai:latest
+      
+    - name: Login to repository
+      run: docker login ${{secrets.DOCKER_ENDPOINT}} -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
+      
+    - name: Push image
+      run: docker push ${{secrets.DOCKER_ENDPOINT}}/zero-tools/mirai:latest
+
+        
