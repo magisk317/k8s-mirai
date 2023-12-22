@@ -2,10 +2,12 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   namespace: {{ .Release.Namespace }}
-  name: {{ .Release.Name }}-mirai-api-setting-configmap
+  name: {{ .Release.Name }}-configmap
 data:
   settings: {{ .Values.mirai.miraiApiHttp.settings | toYaml | quote }}
-  auto-login-secrets: {{ .Values.mirai.autoLoginAccounts.secretName | default "mirai-auto-login-secrets" | quote }}
+  {{- range $.Values.mirai.configurations }}
+  {{ .name }}: {{ .content | quote }}
+  {{- end }}
   {{- with .Values.unidbgFetchSign.enabled }}
   kfc: |-
     {

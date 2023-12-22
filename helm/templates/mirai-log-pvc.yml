@@ -1,0 +1,16 @@
+{{- if $.Values.mirai.storageLogs.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bound-by-controller: 'yes'
+  name: {{ .Values.mirai.storageLogs.name }}
+  namespace:  {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.mirai.storageLogs.size }}
+  volumeMode: Filesystem
+{{- end }}

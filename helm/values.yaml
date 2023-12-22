@@ -1,11 +1,15 @@
 mirai:
   name: mirai
-  # 默认镜像 mirai 2.1.2 需要的可以升级，使用mirai文件夹那个dockerfile就能打出来
-  image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
-  pullPolicy: IfNotPresent
-  cache:
-    name: mirai-bot-cache
+  # 默认镜像 mirai 2.1.2 需要的可以升级，使用mirai文件夹那个Dockerfile就能打出来
+  image: registry.cn-beijing.aliyuncs.com/zero-tools/mirai:latest
+  pullPolicy: Always
+
+  # 是否启用日志持久化？
+  storageLogs:
+    enabled: true
+    name: mirai-bot-log-pvc
     size: 500Mi
+
   # 暴露mirai-api-http
   miraiApiHttp:
     enabled: true
@@ -32,24 +36,18 @@ mirai:
     # 需要的话可以自己加 ingress
     service:
       enabled: true
-  # 自动登录的帐号，配置到secret中
-  # 会在容器启动时自动生成并覆盖 /mirai/config/Console/AutoLogin.yml
-  autoLoginAccounts:
-    secretName: mirai-auto-login-secrets
-    accounts:
-      - # 帐号列表
-        account: 123456
-        password: 
-          kind: PLAIN
-          value: pwd
-  installPlugins:
-    
-  # 需要覆盖的配置
-  overrideConfigurations:
-    # - path: /mirai/config/net.mamoe.mirai-api-http/setting.yml
-    #   content: >-
-    #     raw-contents
-
+  
+  # 自动生成的配置文件，其他的配置可以在这里设置
+  configurations:
+    - name: accountLogin
+      path: Console/AutoLogin.yml
+      content: |-
+        accounts:
+        - account: 123456
+          password: 
+            kind: PLAIN
+            value: pwd
+  
 # 这个自带的签名就只支持内网了，需要的自己加 ingress
 unidbgFetchSign:
   enabled: true

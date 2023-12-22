@@ -26,14 +26,42 @@ spec:
             containerPort: {{ . }}
             protocol: TCP
         {{- end }}
+        volumeMounts:
+          - name: "mirai-configurations"
+            mountPath: /mirai-configurations
+          {{- if $.Values.mirai.storageLogs.enabled }}
+          - name: mirai-logs
+            mountPath: /mirai/logs
+            mountPropagation: None
+          {{- end }}
+    volumes:
+      - name: mirai-configurations
+        configMap:
+          defaultMode: 420
+          items:
+          - key: kfc
+            path: KFCFactory.json
+          - key: settings
+            path: config/net.mamoe.mirai-api-http/setting.yml
+          {{- range $.Values.mirai.configurations }}
+          - key: {{ .name }}
+            path: {{ .path }}
+          {{- end}}
+      {{- if $.Values.mirai.storageLogs.enabled }}
+      - name: mirai-logs
+        persistentVolumeClaim:
+          claimName: {{ .Values.mirai.storageLogs.name }}
+      {{- end }}
     {{- with .Values.nodeSelector }}
     nodeSelector:
       {{- toYaml . | nindent 8 }}
     {{- end }}
+
     {{- with .Values.affinity }}
     affinity:
       {{- toYaml . | nindent 8 }}
     {{- end }}
+
     {{- with .Values.tolerations }}
     tolerations:
       {{- toYaml . | nindent 8 }}
