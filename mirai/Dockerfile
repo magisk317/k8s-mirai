@@ -11,7 +11,7 @@ RUN . ./mcl -z
 # install plugin dependencies
 
 FROM base AS plugin
-COPY /plugins /mirai/
+COPY /plugins /mirai/plugins
 RUN . ./mcl -z
 RUN echo "stop" | /bin/bash ./mcl
 
