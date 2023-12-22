@@ -4,12 +4,12 @@ WORKDIR /mirai
 COPY /*.json /mirai/
 COPY /mcl* /mirai/
 WORKDIR /mirai
-RUN . ./mcl -z
+RUN /bin/bash ./mcl -z > /dev/null
 
 # install plugin dependencies
 FROM base AS plugin
 COPY /plugins /mirai/plugins
-RUN . ./mcl -z
+RUN . ./mcl -z > /dev/null
 RUN echo "stop" | /bin/bash ./mcl -k > /dev/null
 
 FROM base AS run

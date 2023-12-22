@@ -49,13 +49,15 @@ mirai:
   # 自动生成的配置文件，其他的配置可以在这里设置
   configurations:
     - name: accountLogin
-      path: Console/AutoLogin.yml
+      path: config/Console/AutoLogin.yml
       content: |-
         accounts:
         - account: 123456
           password: 
             kind: PLAIN
             value: pwd
+          configuration: 
+            enable: true
   
 # 这个自带的签名就只支持内网了，需要的自己加 ingress
 unidbgFetchSign:

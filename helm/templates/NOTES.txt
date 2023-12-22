@@ -27,3 +27,12 @@ kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAI
 {{- if not .Values.mirai.storageBots.enabled }}
 注意：你没有选择持久化bot的登录状态，可能每次集群重启都需要重新登录
 {{- end }}
+
+注意：如果你只修改了配置文件可能`mirai`部署不会重启，你可以用下面的命令重启
+----
+kubectl rollout restart -n {{ .Release.Namespace }} deployment/{{ include "template.name" . }}
+
+
+你可以用下面的命令链接mcl，执行mcl中的命令和mcl交互：
+----
+kubectl attach -n {{ .Release.Namespace }} deployment/{{ include "template.name" . }}
