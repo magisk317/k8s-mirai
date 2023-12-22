@@ -34,6 +34,11 @@ spec:
             mountPath: /mirai/logs
             mountPropagation: None
           {{- end }}
+          {{- if $.Values.mirai.storageBots.enabled }}
+          - name: mirai-bots
+            mountPath: /mirai/bots
+            mountPropagation: None
+          {{- end }}
     volumes:
       - name: mirai-configurations
         configMap:
@@ -51,6 +56,11 @@ spec:
       - name: mirai-logs
         persistentVolumeClaim:
           claimName: {{ .Values.mirai.storageLogs.name }}
+      {{- end }}
+      {{- if $.Values.mirai.storageBots.enabled }}
+      - name: mirai-bots
+        persistentVolumeClaim:
+          claimName: {{ .Values.mirai.storageBots.name }}
       {{- end }}
     {{- with .Values.nodeSelector }}
     nodeSelector:

@@ -1,0 +1,16 @@
+{{- if $.Values.mirai.storageBots.enabled -}}
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  annotations:
+    pv.kubernetes.io/bound-by-controller: 'yes'
+  name: {{ .Values.mirai.storageBots.name }}
+  namespace:  {{ .Release.Namespace }}
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: {{ .Values.mirai.storageBots.size }}
+  volumeMode: Filesystem
+{{- end }}

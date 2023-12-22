@@ -1,0 +1,29 @@
+下列镜像将被部署:
+- mirai{{"\t\t\t"}}| {{ .Values.mirai.image }}
+{{- if .Values.unidbgFetchSign.enabled }}
+- unidbg-fetch-qsign{{"\t"}}| {{ .Values.unidbgFetchSign.image }}
+{{- end }}
+
+下列配置将在容器运行时写入:
+- KFCFactory.json
+- config/net.mamoe.mirai-api-http/setting.yml
+{{- range .Values.mirai.configurations }}
+- {{ .path }}
+{{- end }}
+
+{{- if .Values.mirai.miraiApiHttp.enabled }}
+{{- if .Values.mirai.miraiApiHttp.service.enabled }}
+{{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
+你已选择暴露mirai-api，自动根据你的设置开放了下列端口：{{- range $apiPorts }}{{.}} {{- end }}
+可以用下列指令将mirai-api的端口通过kubectl转发到本地：
+---
+export POD_NAME=$(kubectl get pods --namespace {{ .Release.Namespace }} -l "app.kubernetes.io/name={{ include "template.name" . }},app.kubernetes.io/instance={{ .Release.Name }}" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace {{ .Release.Namespace }} $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+kubectl --namespace {{ .Release.Namespace }} port-forward $POD_NAME 8080:$CONTAINER_PORT
+---
+{{- end }}
+{{- end }}
+
+{{- if not .Values.mirai.storageBots.enabled }}
+注意：你没有选择持久化bot的登录状态，可能每次集群重启都需要重新登录
+{{- end }}
