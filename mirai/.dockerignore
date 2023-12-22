@@ -1,8 +1,8 @@
 bots/
 config/
 libs/
-modules
+modules/
 plugin-libraries/
 plugin-shared-libraries/
 logs/
-mirai/plugins/
+plugins/

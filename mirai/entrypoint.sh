@@ -1,4 +1,4 @@
 #!/bin/sh
 
-/bin/sh mcl 
+/bin/sh mcl
 
