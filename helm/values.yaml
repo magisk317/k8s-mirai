@@ -62,6 +62,7 @@ unidbgFetchSign:
   enabled: true
   # 签名镜像也可以自己替换
   image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
+  port: 8080
   pullPolicy: IfNotPresent
   # 如果enabled: false使用自己的签名服务
   # 则需要自己传入 KFCFactory.json的内容

@@ -31,13 +31,13 @@ spec:
           imagePullPolicy: {{ .Values.unidbgFetchSign.pullPolicy }}
           ports: 
             - name: http
-              containerPort: 8080
+              containerPort: {{ .Values.unidbgFetchSign.port | default 8080 }}
               protocol: TCP
           livenessProbe:
             failureThreshold: 10
             httpGet:
               path: /
-              port: 8080
+              port: {{ .Values.unidbgFetchSign.port | default 8080 }}
               scheme: HTTP
             initialDelaySeconds: 5
             periodSeconds: 5
