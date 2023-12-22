@@ -47,6 +47,6 @@
   ],
   "disabled_modules": [],
   "proxy": "",
-  "log_level": 0,
+  "log_level": 5,
   "modules_props": {}
 }
