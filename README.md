@@ -10,7 +10,7 @@ Mirai dockerize
 - mirai-api-http-2.9.1.mirai2
 - mcl-addon-2.1.1
 
-## (WIP) Helm Chart
+## Helm Chart
 默认会部署一个`unidbg-fetch-sign`和一个`miria`实例，相关参数均需要下载`values.yml`来自己override，比如mirai的容器、签名服务用哪个，自动登录的qq帐号之类的。如果你基于上面的容器定制了自己需要的插件，可以在这里将image替换掉。还会挂载一个volume来存储/mirai/bots下的文件，以便集群重启也能够恢复登录状态。
 
 ### 替换签名服务的备注
