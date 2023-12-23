@@ -54,3 +54,22 @@ helm install mirai ./
 
 ### 图形验证码...
 之前笔者比较偷懒都是在本地机器上登陆好之后，再将`bots`文件夹打包扔到服务器覆盖，将整个方案扔到k8s集群里显然不能继续用这么土的方法了。但目前能想到比较好操作的方法也只是在集群内搞个临时http代理，然后再到本机验证了，过于麻烦，最终还是选择了把bots的PVC挂在出来，然后手动覆盖了。
+
+### 一些小技巧
+这些技巧会在执行完helm install之后打印到控制台，一些变量如安装的`namespace`会有相应替换，请以`helm install`之后显示的结果为准
+
+#### 直接转发容器的端口到本地
+本地调试api的时候很好用
+```
+export POD_NAME=$(kubectl get pods --namespace mirai -l "app.kubernetes.io/name=mirai,app.kubernetes.io/instance=mirai" -o jsonpath="{.items[0].metadata.name}")
+export CONTAINER_PORT=$(kubectl get pod --namespace mirai $POD_NAME -o jsonpath="{.spec.containers[0].ports[0].containerPort}")
+kubectl --namespace mirai port-forward $POD_NAME 8080:$CONTAINER_PORT
+```
+
+#### attch到mcl的容器
+突发情况执行一些命令很好用
+```
+kubectl rollout restart -n mirai -it deployment/mirai
+```
+
+
