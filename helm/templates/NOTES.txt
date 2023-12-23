@@ -35,4 +35,4 @@ kubectl rollout restart -n {{ .Release.Namespace }} deployment/{{ include "templ
 
 你可以用下面的命令链接mcl，执行mcl中的命令和mcl交互：
 ----
-kubectl attach -n {{ .Release.Namespace }} deployment/{{ include "template.name" . }}
+kubectl attach -n {{ .Release.Namespace }} -it deployment/{{ include "template.name" . }}
