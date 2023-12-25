@@ -69,7 +69,7 @@ kubectl --namespace mirai port-forward $POD_NAME 8080:$CONTAINER_PORT
 #### attch到mcl的容器
 突发情况执行一些命令很好用
 ```
-kubectl rollout restart -n mirai -it deployment/mirai
+kubectl attach -n mirai -it deployment/mirai
 ```
 
 
