@@ -78,7 +78,7 @@ mirai:
           "qua": "V1_AND_SQ_8.9.90_4938_YYB_D",
           "protocol_type": 1
         }
-    - name: signPhoneProfile
+    - name: signPadProfile
       path: android_pad.json
       content: |-
         {
