@@ -29,6 +29,9 @@ spec:
           name: mirai-sign
           image: {{ $.Values.unidbgFetchSign.image }}
           imagePullPolicy: {{ .Values.unidbgFetchSign.pullPolicy }}
+          env:
+            - name: VERSION
+              value: {{ .Values.unidbgFetchSign.version }}
           ports: 
             - name: http
               containerPort: {{ .Values.unidbgFetchSign.port | default 8080 }}

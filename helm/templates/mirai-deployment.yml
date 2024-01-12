@@ -28,9 +28,6 @@ spec:
           stdin: true
           tty: true
           image: {{ .Values.mirai.image | default ".." }}
-          env:
-            - name: VERSION
-              value: {{ .Values.unidbgFetchSign.version }}
           imagePullPolicy: {{ .Values.mirai.pullPolicy }}
           {{ $apiPorts := $.Values.mirai.miraiApiHttp.settings.adapterSettings.http.port | list $.Values.mirai.miraiApiHttp.settings.adapterSettings.ws.port | uniq }}
           ports: 
