@@ -16,6 +16,41 @@ data:
           "base_url": "http://{{$fullName}}-sign:8080",
           "type": "fuqiuluo/unidbg-fetch-qsign",
           "key": "114514"
+      },
+      "8.9.68": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.70": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.73": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.80": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.83": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.85": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
+      },
+      "8.9.90": {
+          "base_url": "http://{{$fullName}}-sign:8080",
+          "type": "fuqiuluo/unidbg-fetch-qsign",
+          "key": "114514"
       }
     }
   {{- end }}
