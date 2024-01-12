@@ -63,19 +63,19 @@ mirai:
       content: |-
         {
           "apk_id": "com.tencent.mobileqq",
-          "app_id": 537189829,
-          "sub_app_id": 537189829,
+          "app_id": 537185007,
+          "sub_app_id": 537185007,
           "app_key": "0S200MNJT807V3GE",
-          "sort_version_name": "8.9.96.13525",
-          "build_time": 1701164403,
+          "sort_version_name": "8.9.90.13250",
+          "build_time": 1697015435,
           "apk_sign": "a6b745bf24a2c277527716f6f36eb68d",
-          "sdk_version": "6.0.0.2557",
+          "sdk_version": "6.0.0.2556",
           "sso_version": 21,
           "misc_bitmap": 150470524,
           "main_sig_map": 16724722,
           "sub_sig_map": 66560,
-          "dump_time": "1701164403",
-          "qua": "V1_AND_SQ_8.9.96_5048_HDBM_T",
+          "dump_time": "1697015435",
+          "qua": "V1_AND_SQ_8.9.90_4938_YYB_D",
           "protocol_type": 1
         }
     - name: signPhoneProfile
@@ -83,29 +83,30 @@ mirai:
       content: |-
         {
           "apk_id": "com.tencent.mobileqq",
-          "app_id": 537189752,
-          "sub_app_id": 537189752,
+          "app_id": 537185046,
+          "sub_app_id": 537185046,
           "app_key": "0S200MNJT807V3GE",
-          "sort_version_name": "8.9.96.13525",
-          "build_time": 1701164403,
+          "sort_version_name": "8.9.90.13250",
+          "build_time": 1697015435,
           "apk_sign": "a6b745bf24a2c277527716f6f36eb68d",
-          "sdk_version": "6.0.0.2557",
+          "sdk_version": "6.0.0.2556",
           "sso_version": 21,
           "misc_bitmap": 150470524,
           "main_sig_map": 16724722,
           "sub_sig_map": 66560,
-          "dump_time": "1701164403",
-          "qua": "V1_AND_SQ_8.9.96_5048_HDBM_T",
+          "dump_time": "1697015435",
+          "qua": "V1_AND_SQ_8.9.90_4938_YYB_D",
           "protocol_type": 6
         }
+
 # 这个自带的签名就只支持内网了，需要的自己加 ingress
 unidbgFetchSign:
   enabled: true
   # 签名镜像也可以自己替换
   image: registry.cn-beijing.aliyuncs.com/zero-tools/unidbg-fetch-qsign:latest
   port: 8080
-  pullPolicy: IfNotPresent
-  version: 8.9.96
+  pullPolicy: Always
+  version: 8.9.90
   # 如果enabled: false使用自己的签名服务
   # 则需要自己传入 KFCFactory.json的内容
   # true的时候传入无效
