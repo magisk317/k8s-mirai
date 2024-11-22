@@ -4,5 +4,5 @@ if [ -d /mirai-configurations/..data ]; then
     cp -r /mirai-configurations/..data/* ./
 fi
 
-/bin/sh mcl --boot-only
+/bin/sh mcl
 
