@@ -1,24 +1,33 @@
-name: Build Image
+name: Docker Build on Merge
 
 on:
-  push:
-    branches: [ "main" ]
+  workflow_dispatch:  # 手动触发
 
 jobs:
-
   build:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-    - name: Login to repository
-      run: docker login ${{secrets.DOCKER_ENDPOINT}} -u ${{secrets.DOCKER_USER}} -p ${{secrets.DOCKER_PASSWORD}}
-      
-    - name: Build the Docker image
-      run: cd mirai && docker build --pull . -t ${{secrets.DOCKER_ENDPOINT}}/zero-tools/mirai:latest
-      
-    - name: Push image
-      run: docker push ${{secrets.DOCKER_ENDPOINT}}/zero-tools/mirai:latest
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v2
 
-        
+    - name: Log in to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PAT }}
+
+    - name: Get short SHA
+      id: vars
+      run: echo "GIT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
+    - name: Build and push Docker image
+      uses: docker/build-push-action@v4
+      with:
+        context: ./mirai
+        push: true
+        tags: alpha317/mirai:latest,alpha317/mirai:${{ env.GIT_SHA }}
+        no-cache: true
